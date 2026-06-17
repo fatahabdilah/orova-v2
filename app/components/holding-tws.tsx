@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Reveal } from "./motion/reveal";
 
 export function HoldingTws() {
   return (
@@ -17,7 +18,7 @@ export function HoldingTws() {
         className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent"
       />
 
-      <div className="relative flex w-full max-w-110.5 flex-col items-start gap-8 sm:gap-10">
+      <Reveal className="relative flex w-full max-w-110.5 flex-col items-start gap-8 sm:gap-10">
         <div className="flex flex-col items-start gap-5">
           <Image
             src="/logos/tws.png"
@@ -40,7 +41,7 @@ export function HoldingTws() {
         >
           Visit Our Website
         </a>
-      </div>
+      </Reveal>
     </section>
   );
 }

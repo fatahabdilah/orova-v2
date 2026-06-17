@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Reveal } from "./motion/reveal";
 
 const cards = [
   {
@@ -20,16 +21,20 @@ const cards = [
 export function ValueCards() {
   return (
     <section className="flex flex-col items-center gap-12 overflow-hidden border-t border-black/20 bg-black px-6 py-20 sm:px-8 md:px-12 lg:gap-20 lg:px-16 lg:py-32 xl:px-20">
-      <h2 className="max-w-4xl text-center text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
-        Kami untung saat kamu untung.
-        <br />
-        Orova bukan amal, bukan skema.
-      </h2>
+      <Reveal as="div" className="w-full">
+        <h2 className="mx-auto max-w-4xl text-center text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
+          Kami untung saat kamu untung.
+          <br />
+          Orova bukan amal, bukan skema.
+        </h2>
+      </Reveal>
 
       <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10">
-        {cards.map((card) => (
-          <div
+        {cards.map((card, i) => (
+          <Reveal
+            as="div"
             key={card.logoAlt}
+            delay={i * 0.12}
             className="relative flex aspect-918/500 flex-col justify-between gap-12 overflow-hidden rounded-lg px-8 py-8 sm:px-10"
           >
             {/* Glow texture fills the card */}
@@ -52,7 +57,7 @@ export function ValueCards() {
             <p className="relative max-w-md text-lg leading-relaxed text-white/60 2xl:text-xl">
               {card.text}
             </p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>

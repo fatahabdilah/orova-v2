@@ -1,6 +1,7 @@
 import { SiteNav } from "./components/site-nav";
 import { Hero } from "./components/hero";
 import { DemographicStats } from "./components/demographic-stats";
+import { Ecosystem } from "./components/ecosystem";
 import { HoldingKonten } from "./components/holding-konten";
 import { HoldingTws } from "./components/holding-tws";
 import { Genesis } from "./components/genesis";
@@ -14,6 +15,7 @@ export default function Home() {
       <SiteNav />
       <Hero />
       <DemographicStats />
+      <Ecosystem />
       <HoldingKonten />
       <HoldingTws />
       <Genesis />

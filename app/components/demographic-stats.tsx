@@ -1,3 +1,6 @@
+import { Reveal } from "./motion/reveal";
+import { CountUp } from "./motion/count-up";
+
 const stats = [
   {
     label: "Dominasi Gen Z",
@@ -24,7 +27,7 @@ const stats = [
 export function DemographicStats() {
   return (
     <section className="flex flex-col gap-20 overflow-hidden bg-white px-6 py-20 sm:px-8 md:px-12 lg:px-16 lg:py-28 xl:px-20 xl:py-32">
-      <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end lg:gap-12">
+      <Reveal className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end lg:gap-12">
         <h2 className="max-w-xl text-3xl font-normal leading-tight text-black sm:text-4xl 2xl:text-5xl">
           Bonus demografi
           <br />
@@ -34,12 +37,14 @@ export function DemographicStats() {
           Generasi yang harus membawa Indonesia ke emas dibiarkan terjepit
           tanpa jalan
         </p>
-      </div>
+      </Reveal>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <div
+        {stats.map((stat, i) => (
+          <Reveal
+            as="div"
             key={stat.label}
+            delay={i * 0.1}
             className="flex flex-col justify-between gap-8 border-l border-black px-6 py-6 sm:min-h-72 lg:px-10"
           >
             <h3 className="text-lg font-medium leading-tight text-black sm:text-xl sm:leading-9">
@@ -47,13 +52,13 @@ export function DemographicStats() {
             </h3>
             <div className="flex flex-col gap-4 sm:gap-5">
               <span className="text-5xl font-medium leading-none text-black 2xl:text-7xl">
-                {stat.value}
+                <CountUp value={stat.value} />
               </span>
-              <p className="text-base leading-tight text-black/30 sm:max-w-56 sm:text-lg">
+              <p className="text-base leading-tight text-black/30 sm:max-w-64 sm:text-lg lg:min-h-[2lh]">
                 {stat.note}
               </p>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>

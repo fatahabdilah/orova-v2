@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Reveal } from "./motion/reveal";
 
 export function Contact() {
   return (
@@ -13,7 +14,7 @@ export function Contact() {
         className="pointer-events-none absolute inset-0 object-cover object-right opacity-80"
       />
 
-      <div className="relative flex flex-1 flex-col justify-between gap-12">
+      <Reveal className="relative flex flex-1 flex-col justify-between gap-12">
         <h2 className="max-w-2xl text-4xl font-medium leading-tight text-black sm:text-5xl lg:text-6xl 2xl:text-7xl">
           Generasi emas dimulai dari kamu.
         </h2>
@@ -38,7 +39,7 @@ export function Contact() {
             </a>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
