@@ -39,10 +39,10 @@ export function HoldingKonten() {
             height={47}
             className="h-6 w-auto sm:h-7 2xl:h-8"
           />
-          <h2 className="text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
+          <h2 className="text-2xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
             Marketplace Clipper
           </h2>
-          <p className="text-lg leading-relaxed text-white/50 2xl:text-xl">
+          <p className="text-sm leading-relaxed text-white/50 sm:text-lg 2xl:text-xl">
             Marketplace clipping berbasis performa di Indonesia yang
             menghubungkan brand dengan kreator konten di TikTok, Instagram, dan
             YouTube.
@@ -52,7 +52,7 @@ export function HoldingKonten() {
           href="https://konten.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-full bg-white px-4 py-1 text-lg text-black transition-opacity hover:opacity-80 2xl:text-xl"
+          className="inline-flex items-center justify-center rounded-full bg-white px-4 py-1 text-base text-black transition-opacity hover:opacity-80 sm:text-lg 2xl:text-xl"
         >
           Visit Our Website
         </a>
