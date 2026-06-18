@@ -35,7 +35,7 @@ export function ValueCards() {
             as="div"
             key={card.logoAlt}
             delay={i * 0.12}
-            className="relative flex aspect-918/500 flex-col justify-between gap-12 overflow-hidden rounded-lg px-8 py-8 sm:px-10"
+            className="relative flex aspect-918/500 flex-col justify-start gap-5 overflow-hidden rounded-lg px-8 pb-12 pt-8 sm:justify-between sm:gap-12 sm:px-10 sm:pb-8"
           >
             {/* Glow texture fills the card */}
             <Image
