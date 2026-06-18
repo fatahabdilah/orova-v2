@@ -20,6 +20,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#000000",
+  // Extend under the iOS safe areas so the home-indicator strip uses our
+  // black background instead of the browser's default white.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

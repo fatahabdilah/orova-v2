@@ -3,7 +3,7 @@ import { Rise } from "./motion/rise";
 
 export function Hero() {
   return (
-    <section className="relative flex h-screen min-h-screen items-start overflow-hidden bg-neutral-950 px-6 pt-40 sm:items-center sm:px-8 sm:pt-0 md:px-12 lg:px-16 xl:px-20">
+    <section className="relative flex h-dvh min-h-dvh items-start overflow-hidden bg-neutral-950 px-6 pt-40 sm:items-center sm:px-8 sm:pt-0 md:px-12 lg:px-16 xl:px-20">
       {/* Background video — portrait on mobile, landscape on larger screens.
           Poster stills fall back while each loads. */}
       <HeroVideo className="absolute inset-0 h-full w-full object-cover" />

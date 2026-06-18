@@ -3,7 +3,7 @@ import { Reveal } from "./motion/reveal";
 
 export function HoldingTws() {
   return (
-    <section className="relative flex h-screen min-h-screen w-full items-end justify-center overflow-hidden bg-black px-6 pb-12 sm:items-center sm:justify-start sm:px-8 sm:pb-0 md:pl-20 lg:pl-28 xl:pl-32">
+    <section className="relative flex h-dvh min-h-dvh w-full items-end justify-center overflow-hidden bg-black px-6 pb-24 sm:items-center sm:justify-start sm:px-8 sm:pb-0 md:pl-20 lg:pl-28 xl:pl-32">
       {/* Background — portrait on mobile (laptop on top), landscape on larger
           screens (laptop on the right). */}
       <Image
@@ -27,8 +27,8 @@ export function HoldingTws() {
         className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent sm:bg-linear-to-r sm:from-black sm:via-black/60 sm:to-transparent"
       />
 
-      <Reveal className="relative flex w-full max-w-110.5 flex-col items-center gap-8 text-center sm:items-start sm:gap-10 sm:text-left">
-        <div className="flex flex-col items-center gap-5 sm:items-start">
+      <Reveal className="relative flex w-full max-w-110.5 flex-col items-center gap-6 text-center sm:items-start sm:gap-10 sm:text-left">
+        <div className="flex flex-col items-center gap-3 sm:items-start sm:gap-5">
           <Image
             src="/logos/tws.png"
             alt="Trade With Suli"

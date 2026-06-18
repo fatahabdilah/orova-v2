@@ -25,11 +25,18 @@ function pillBorderStyle(fade: "bottom-left" | "top-right"): CSSProperties {
  * A burst of blue rays fanning out to the right, emerging from a single point
  * on the left edge (where it meets the pill). Pure SVG with a soft blue glow.
  */
+/** Total seconds for one orange→white→blue flow cycle across the whole row. */
+const FLOW_CYCLE = 3.6;
+
 function RayBurst({
   className,
   color = "#3b82f6",
   id = "ray",
   spread = [-150, -75, 0, 75, 150],
+  /** When in the cycle this burst lights up: 0 = first (orange), 0.66 = last. */
+  flowPhase = 0,
+  /** Direction the light travels: "out" = away from pill, "in" = toward pill. */
+  flowDir = "out",
 }: {
   className?: string;
   color?: string;
@@ -37,6 +44,8 @@ function RayBurst({
   id?: string;
   /** Vertical offset of each pipe's endpoint from center — wider = more flare. */
   spread?: number[];
+  flowPhase?: number;
+  flowDir?: "in" | "out";
 }) {
   // 5 pipes leaving the pill at the left-center and diverging. The viewBox is
   // sized to the widest endpoint so no pipe runs off the edge — every pipe then
@@ -56,6 +65,27 @@ function RayBurst({
       className={className}
     >
       <defs>
+        {/* SVG-scoped keyframe so it can't be tree-shaken by the CSS pipeline.
+            Drives the flowing light along each pipe. */}
+        <style>{`
+          @keyframes ray-flow-${id} {
+            /* Light streams along the pipe during the first ~30% of the cycle,
+               then waits dark until its turn comes round again. */
+            0%   { stroke-dashoffset: ${flowDir === "out" ? 0 : -vh}; opacity: 0; }
+            2%   { opacity: 1; }
+            28%  { opacity: 1; }
+            30%  { stroke-dashoffset: ${flowDir === "out" ? -vh : 0}; opacity: 0; }
+            100% { stroke-dashoffset: ${flowDir === "out" ? -vh : 0}; opacity: 0; }
+          }
+          .flow-${id} {
+            stroke-dasharray: ${vh * 0.18} ${vh};
+            animation: ray-flow-${id} ${FLOW_CYCLE}s linear infinite;
+            animation-delay: ${flowPhase * FLOW_CYCLE}s;
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .flow-${id} { animation: none; opacity: 0; }
+          }
+        `}</style>
         {/* Fixed region (userSpaceOnUse) so a perfectly horizontal centre pipe
             — whose bounding box has zero height — still gets blurred instead of
             collapsing the filter region and vanishing. */}
@@ -97,27 +127,40 @@ function RayBurst({
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
-      <g
-        filter={`url(#${glowId})`}
-        stroke={`url(#${fadeId})`}
-        strokeWidth="2"
-        strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
-      >
+      <g filter={`url(#${glowId})`} strokeLinecap="round">
         {spread.map((dy, i) => {
           // Start each pipe at a slightly different y at the pill (spread the
           // roots vertically), then sweep out as one smooth circular arc — no
           // sharp bend followed by a flat run.
-          const startY = cx + dy * 0.12;
+          const startY = cx + dy * 0.07;
           const endY = cx + dy * 1.3;
-          if (dy === 0) {
-            return <path key={i} d={`M0 ${startY} L 240 ${endY}`} />;
-          }
-          // A large radius gives a gentle, even curvature across the whole span.
-          const r = 360;
+          // Scale the arc radius with how far the pipe travels so the outer
+          // pipes curve as gently as the inner ones (no sharp bend at the tip).
+          const r = 360 + Math.abs(dy) * 1.6;
           const sweep = dy > 0 ? 1 : 0;
+          const d =
+            dy === 0
+              ? `M0 ${startY} L 240 ${endY}`
+              : `M0 ${startY} A ${r} ${r} 0 0 ${sweep} 240 ${endY}`;
           return (
-            <path key={i} d={`M0 ${startY} A ${r} ${r} 0 0 ${sweep} 240 ${endY}`} />
+            <g key={i}>
+              {/* Base pipe */}
+              <path
+                d={d}
+                stroke={`url(#${fadeId})`}
+                strokeWidth="4"
+                vectorEffect="non-scaling-stroke"
+              />
+              {/* Light streaming along the pipe — lit only during this burst's
+                  phase of the global cycle. Coloured to match the pipe. */}
+              <path
+                d={d}
+                fill="none"
+                stroke={color}
+                strokeWidth="6"
+                className={`flow-${id}`}
+              />
+            </g>
           );
         })}
       </g>
@@ -147,6 +190,38 @@ function Pill({
 export function Ecosystem() {
   return (
     <section className="flex flex-col items-center gap-12 overflow-hidden bg-black px-6 py-24 sm:px-8 md:px-12 lg:gap-20 lg:px-16 lg:py-36 xl:px-20">
+      {/* White pulse travelling the connector, in the middle third of the
+          cycle (after orange reaches pill 1, before blue leaves pill 2). */}
+      <style>{`
+        @keyframes conn-flow-h {
+          0%, 30%, 100% { background-position: -40% 0; opacity: 0; }
+          33% { opacity: 1; }
+          62% { opacity: 1; }
+          65% { background-position: 140% 0; opacity: 0; }
+        }
+        @keyframes conn-flow-v {
+          0%, 30%, 100% { background-position: 0 -40%; opacity: 0; }
+          33% { opacity: 1; }
+          62% { opacity: 1; }
+          65% { background-position: 0 140%; opacity: 0; }
+        }
+        .conn-pulse-h {
+          background: linear-gradient(to right, transparent, #fff, transparent);
+          background-size: 40% 100%;
+          background-repeat: no-repeat;
+          animation: conn-flow-h ${FLOW_CYCLE}s linear infinite;
+        }
+        .conn-pulse-v {
+          background: linear-gradient(to bottom, transparent, #fff, transparent);
+          background-size: 100% 40%;
+          background-repeat: no-repeat;
+          animation: conn-flow-v ${FLOW_CYCLE}s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .conn-pulse-h, .conn-pulse-v { animation: none; opacity: 0; }
+        }
+      `}</style>
+
       <Reveal className="flex flex-col items-center gap-5 text-center">
         <h2 className="max-w-3xl text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
           Indonesia nggak bisa emas,
@@ -169,6 +244,8 @@ export function Ecosystem() {
             id="ray-konten-m"
             color="#f97316"
             spread={[-300, -150, 0, 150, 300]}
+            flowPhase={0}
+            flowDir="in"
             className="pointer-events-none absolute bottom-0 left-1/2 h-52 w-32 -translate-x-1/2 -rotate-90"
           />
         </div>
@@ -181,7 +258,9 @@ export function Ecosystem() {
           <RayBurst
             id="ray-konten"
             color="#f97316"
-            className="pointer-events-none absolute right-full top-1/2 -mr-6 hidden h-80 w-32 -translate-y-1/2 -scale-x-100 sm:block lg:w-44"
+            flowPhase={0}
+            flowDir="in"
+            className="pointer-events-none absolute right-full top-1/2 -mr-16 hidden h-80 w-40 -translate-y-1/2 -scale-x-100 sm:block lg:w-52"
           />
           <Pill fade="bottom-left">
             <span className="relative text-sm leading-8 text-white sm:text-lg">
@@ -203,6 +282,8 @@ export function Ecosystem() {
           <span className="absolute inset-y-0 -left-2/3 w-full rounded-[50%] bg-black" />
           <span className="absolute inset-y-0 -right-2/3 w-full rounded-[50%] bg-black" />
           <span className="pointer-events-none absolute -inset-x-0.5 inset-y-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.6)_0%,rgba(255,255,255,1)_50%,rgba(255,255,255,0.6)_100%)] blur-sm" />
+          {/* White pulse flowing down between the pills */}
+          <span className="conn-pulse-v pointer-events-none absolute -inset-y-4 inset-x-0 blur-md" />
         </div>
 
         {/* Connector (desktop) — a thick white bar pinched thin in the middle by
@@ -229,6 +310,8 @@ export function Ecosystem() {
           <span className="pointer-events-none absolute -left-8 top-1/2 size-20 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_70%)] blur-2xl" />
           <span className="pointer-events-none absolute -right-12 top-1/2 size-28 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.5)_0%,rgba(255,255,255,0)_70%)] blur-3xl" />
           <span className="pointer-events-none absolute -right-8 top-1/2 size-20 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_70%)] blur-2xl" />
+          {/* White pulse flowing left→right along the connector */}
+          <span className="conn-pulse-h pointer-events-none absolute -inset-x-4 inset-y-0 blur-md" />
         </div>
 
         {/* Step 2 — Lalu kembangkan (Trade With Suli) — border fades top-right */}
@@ -240,7 +323,9 @@ export function Ecosystem() {
           <RayBurst
             id="ray-tws"
             color="#3b82f6"
-            className="pointer-events-none absolute left-full top-1/2 -ml-6 hidden h-80 w-32 -translate-y-1/2 sm:block lg:w-44"
+            flowPhase={0.66}
+            flowDir="out"
+            className="pointer-events-none absolute left-full top-1/2 -ml-16 hidden h-80 w-40 -translate-y-1/2 sm:block lg:w-52"
           />
           <Pill fade="top-right">
             <Image
@@ -263,6 +348,8 @@ export function Ecosystem() {
             id="ray-tws-m"
             color="#3b82f6"
             spread={[-300, -150, 0, 150, 300]}
+            flowPhase={0.66}
+            flowDir="out"
             className="pointer-events-none absolute left-1/2 top-0 h-52 w-32 -translate-x-1/2 rotate-90"
           />
         </div>

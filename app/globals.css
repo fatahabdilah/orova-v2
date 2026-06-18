@@ -27,3 +27,17 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Black strip filling the iOS home-indicator safe area at the very bottom, so
+   it isn't the browser's white (or a white footer showing through). */
+body::after {
+  content: "";
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  height: env(safe-area-inset-bottom, 0px);
+  background-color: #000000;
+  pointer-events: none;
+  z-index: 100;
+}
+
