@@ -295,7 +295,7 @@ export function Ecosystem() {
           />
           <Pill fade="bottom-left">
             <span className="relative text-sm leading-8 text-white sm:text-lg">
-              HASILKAN DULU
+              Hasilkan Income dari Nol
             </span>
             <Image
               src="/logos/konten-mark.png"
@@ -367,7 +367,7 @@ export function Ecosystem() {
               className="relative size-8 sm:size-11"
             />
             <span className="relative text-sm leading-8 text-white sm:text-lg">
-              LALU KEMBANGKAN
+              Baru Mulai Berinvestasi
             </span>
           </Pill>
         </div>

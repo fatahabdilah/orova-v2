@@ -40,12 +40,12 @@ export function HoldingKonten() {
             className="h-6 w-auto sm:h-7 2xl:h-8"
           />
           <h2 className="text-2xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
-            Marketplace Clipper
+            Hasilkan Uang Tanpa Modal
           </h2>
           <p className="text-sm leading-relaxed text-white/50 sm:text-lg 2xl:text-xl">
-            Marketplace clipping berbasis performa di Indonesia yang
-            menghubungkan brand dengan kreator konten di TikTok, Instagram, dan
-            YouTube.
+            Konten.com adalah platform yang menghubungkan brands dan content
+            creator yang ingin menghasilkan. Mulai tanpa modal, gratis,
+            sekarang.
           </p>
         </div>
         <a
