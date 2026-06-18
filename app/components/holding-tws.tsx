@@ -3,7 +3,7 @@ import { Reveal } from "./motion/reveal";
 
 export function HoldingTws() {
   return (
-    <section className="relative flex h-dvh min-h-dvh w-full items-end justify-center overflow-hidden bg-black px-6 pb-24 sm:items-center sm:justify-start sm:px-8 sm:pb-0 md:pl-20 lg:pl-28 xl:pl-32">
+    <section className="relative flex h-svh min-h-svh w-full items-end justify-center overflow-hidden bg-black px-6 pb-24 sm:items-center sm:justify-start sm:px-8 sm:pb-0 md:pl-20 lg:pl-28 xl:pl-32">
       {/* Background — portrait on mobile (laptop on top), landscape on larger
           screens (laptop on the right). */}
       <Image

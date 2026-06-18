@@ -22,7 +22,7 @@ export function ValueCards() {
   return (
     <section className="flex flex-col items-center gap-12 overflow-hidden border-t border-black/20 bg-black px-6 py-20 sm:px-8 md:px-12 lg:gap-20 lg:px-16 lg:py-32 xl:px-20">
       <Reveal as="div" className="w-full">
-        <h2 className="mx-auto max-w-4xl text-center text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
+        <h2 className="mx-auto max-w-4xl text-center text-2xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
           Kami untung saat kamu untung.
           <br />
           Orova bukan amal, bukan skema.

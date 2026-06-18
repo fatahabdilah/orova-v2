@@ -35,7 +35,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} scroll-pt-16 antialiased md:scroll-pt-20 lg:scroll-pt-24`}
     >
-      <body className="flex min-h-dvh flex-col">{children}</body>
+      <body className="flex min-h-svh flex-col">{children}</body>
     </html>
   );
 }

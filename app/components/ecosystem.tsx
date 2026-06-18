@@ -37,6 +37,9 @@ function RayBurst({
   flowPhase = 0,
   /** Direction the light travels: "out" = away from pill, "in" = toward pill. */
   flowDir = "out",
+  /** Stroke width of the streaming light. Thicker = a brighter, more visible
+      flow (used on mobile, where the thin default reads as a blink). */
+  flowWidth = 6,
 }: {
   className?: string;
   color?: string;
@@ -46,6 +49,7 @@ function RayBurst({
   spread?: number[];
   flowPhase?: number;
   flowDir?: "in" | "out";
+  flowWidth?: number;
 }) {
   // 5 pipes leaving the pill at the left-center and diverging. The viewBox is
   // sized to the widest endpoint so no pipe runs off the edge — every pipe then
@@ -69,16 +73,17 @@ function RayBurst({
             Drives the flowing light along each pipe. */}
         <style>{`
           @keyframes ray-flow-${id} {
-            /* Light streams along the pipe during the first ~30% of the cycle,
-               then waits dark until its turn comes round again. */
-            0%   { stroke-dashoffset: ${flowDir === "out" ? 0 : -vh}; opacity: 0; }
+            /* A single bright dash sweeps the whole pipe (pathLength=1) during
+               the first ~30% of the cycle, then waits dark for its next turn.
+               The dash + gap sum to 2 so only one dash is ever on the path. */
+            0%   { stroke-dashoffset: ${flowDir === "out" ? 1 : -1}; opacity: 0; }
             2%   { opacity: 1; }
             28%  { opacity: 1; }
-            30%  { stroke-dashoffset: ${flowDir === "out" ? -vh : 0}; opacity: 0; }
-            100% { stroke-dashoffset: ${flowDir === "out" ? -vh : 0}; opacity: 0; }
+            30%  { stroke-dashoffset: ${flowDir === "out" ? -1 : 1}; opacity: 0; }
+            100% { stroke-dashoffset: ${flowDir === "out" ? -1 : 1}; opacity: 0; }
           }
           .flow-${id} {
-            stroke-dasharray: ${vh * 0.18} ${vh};
+            stroke-dasharray: 0.28 2;
             animation: ray-flow-${id} ${FLOW_CYCLE}s linear infinite;
             animation-delay: ${flowPhase * FLOW_CYCLE}s;
           }
@@ -126,6 +131,21 @@ function RayBurst({
           <stop offset="70%" stopColor={color} stopOpacity="0.85" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
+        {/* Taper gradient: transparent at the pill, opaque toward the tip — used
+            on a thicker stroke so the pipe appears to widen as it flares out. */}
+        <linearGradient
+          id={`${id}-taper`}
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          y1={cx}
+          x2="240"
+          y2={cx}
+        >
+          <stop offset="0%" stopColor={color} stopOpacity="0" />
+          <stop offset="50%" stopColor={color} stopOpacity="0" />
+          <stop offset="88%" stopColor={color} stopOpacity="0.85" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
       </defs>
       <g filter={`url(#${glowId})`} strokeLinecap="round">
         {spread.map((dy, i) => {
@@ -151,13 +171,23 @@ function RayBurst({
                 strokeWidth="4"
                 vectorEffect="non-scaling-stroke"
               />
+              {/* Thicker overlay, only visible toward the tip → flares wider */}
+              <path
+                d={d}
+                fill="none"
+                stroke={`url(#${id}-taper)`}
+                strokeWidth="9"
+                vectorEffect="non-scaling-stroke"
+              />
               {/* Light streaming along the pipe — lit only during this burst's
-                  phase of the global cycle. Coloured to match the pipe. */}
+                  phase of the global cycle. Coloured to match the pipe.
+                  pathLength=1 normalises dash maths across pipes/screens. */}
               <path
                 d={d}
                 fill="none"
                 stroke={color}
-                strokeWidth="6"
+                strokeWidth={flowWidth}
+                pathLength={1}
                 className={`flow-${id}`}
               />
             </g>
@@ -223,7 +253,7 @@ export function Ecosystem() {
       `}</style>
 
       <Reveal className="flex flex-col items-center gap-5 text-center">
-        <h2 className="max-w-3xl text-3xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
+        <h2 className="max-w-3xl text-2xl font-normal leading-tight text-white sm:text-4xl 2xl:text-5xl">
           Indonesia nggak bisa emas,
           <br />
           kalau generasinya nggak emas dulu.
@@ -246,6 +276,7 @@ export function Ecosystem() {
             spread={[-300, -150, 0, 150, 300]}
             flowPhase={0}
             flowDir="in"
+            flowWidth={12}
             className="pointer-events-none absolute bottom-0 left-1/2 h-52 w-32 -translate-x-1/2 -rotate-90"
           />
         </div>
@@ -350,6 +381,7 @@ export function Ecosystem() {
             spread={[-300, -150, 0, 150, 300]}
             flowPhase={0.66}
             flowDir="out"
+            flowWidth={12}
             className="pointer-events-none absolute left-1/2 top-0 h-52 w-32 -translate-x-1/2 rotate-90"
           />
         </div>
@@ -357,7 +389,7 @@ export function Ecosystem() {
 
       {/* Closing tagline pill, centered below the two steps */}
       <Reveal as="div" delay={0.3} className="mt-16 lg:mt-24">
-        <span className="inline-flex items-center justify-center rounded-full px-5 py-2 text-center text-xl text-white outline-1 -outline-offset-1 outline-white 2xl:text-2xl">
+        <span className="inline-flex items-center justify-center rounded-full px-5 py-2 text-center text-base text-white outline-1 -outline-offset-1 outline-white sm:text-xl 2xl:text-2xl">
           Dari cari duit ke kembangkan duit.
         </span>
       </Reveal>

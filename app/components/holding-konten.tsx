@@ -5,7 +5,7 @@ export function HoldingKonten() {
   return (
     <section
       id="portfolio"
-      className="relative flex h-dvh min-h-dvh w-full items-end justify-center overflow-hidden bg-black px-6 pb-24 sm:items-center sm:justify-end sm:px-8 sm:pb-0 md:pr-20 lg:pr-28 xl:pr-32"
+      className="relative flex h-svh min-h-svh w-full items-end justify-center overflow-hidden bg-black px-6 pb-24 sm:items-center sm:justify-end sm:px-8 sm:pb-0 md:pr-20 lg:pr-28 xl:pr-32"
     >
       {/* Background — portrait on mobile (laptop on top), landscape on larger
           screens (laptop on the left). */}
