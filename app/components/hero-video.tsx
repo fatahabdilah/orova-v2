@@ -73,7 +73,7 @@ export function HeroVideo({ className }: { className?: string }) {
         poster="/hero.jpg"
         {...videoProps}
       >
-        <source src="/hero.webm" type="video/webm" />
+        <source src="/hero-desktop.webm" type="video/webm" />
       </video>
     </>
   );

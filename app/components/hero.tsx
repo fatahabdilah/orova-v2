@@ -7,6 +7,7 @@ export function Hero() {
       {/* Background video — portrait on mobile, landscape on larger screens.
           Poster stills fall back while each loads. */}
       <HeroVideo className="absolute inset-0 h-full w-full object-cover" />
+
       {/* Darken for legibility — top-down veil on mobile (text sits up top,
           Garuda stays visible below), left-to-right on larger screens. */}
       <div
