@@ -29,23 +29,28 @@ function RayBurst({
   className,
   color = "#3b82f6",
   id = "ray",
+  spread = [-150, -75, 0, 75, 150],
 }: {
   className?: string;
   color?: string;
   /** Unique key so the filter/gradient ids don't clash between instances. */
   id?: string;
+  /** Vertical offset of each pipe's endpoint from center — wider = more flare. */
+  spread?: number[];
 }) {
-  // 5 pipes leaving the pill at the left-center (0,200) and diverging: the
-  // outer ones keep climbing / dropping and run off the right edge instead of
-  // levelling out. Each entry is the angle of departure (offset from center).
-  const spread = [-150, -75, 0, 75, 150];
-  const cx = 200; // center y of the 0..400 viewBox
+  // 5 pipes leaving the pill at the left-center and diverging. The viewBox is
+  // sized to the widest endpoint so no pipe runs off the edge — every pipe then
+  // fades out via the gradient at x=240, giving a clean, even row of tips
+  // (rather than some fading and some getting clipped).
+  const maxEnd = Math.max(...spread.map((d) => Math.abs(d) * 1.3));
+  const cx = maxEnd + 20; // center y, with a little padding
+  const vh = cx * 2; // viewBox height
   const glowId = `${id}-glow`;
   const fadeId = `${id}-fade`;
   return (
     <svg
       aria-hidden
-      viewBox="0 0 240 400"
+      viewBox={`0 0 240 ${vh}`}
       fill="none"
       preserveAspectRatio="none"
       className={className}
@@ -60,7 +65,7 @@ function RayBurst({
           x="0"
           y="0"
           width="240"
-          height="400"
+          height={vh}
         >
           {/* Two-tier coloured bloom: a wide soft halo + a tighter glow, then
               the crisp pipe on top. */}
@@ -82,9 +87,9 @@ function RayBurst({
           id={fadeId}
           gradientUnits="userSpaceOnUse"
           x1="0"
-          y1="200"
+          y1={cx}
           x2="240"
-          y2="200"
+          y2={cx}
         >
           {/* Stay solid most of the way, then fade out quickly near the tip. */}
           <stop offset="0%" stopColor={color} stopOpacity="0.9" />
@@ -154,11 +159,23 @@ export function Ecosystem() {
         </p>
       </Reveal>
 
-      {/* Steps row — not animated for now */}
-      <div className="flex w-full max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row sm:gap-0">
+      {/* Steps — horizontal row on desktop, vertical stack on mobile:
+          orange rays up → pill 1 → white line → pill 2 → blue rays down. */}
+      <div className="flex w-full max-w-6xl flex-col items-center justify-between gap-0 sm:flex-row">
+        {/* Mobile-only: orange rays pointing UP, above pill 1 */}
+        <div className="relative -mb-14 h-28 w-full sm:hidden">
+          <span className="pointer-events-none absolute bottom-0 left-1/2 size-56 -translate-x-1/2 translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,rgba(249,115,22,0)_70%)] blur-2xl" />
+          <RayBurst
+            id="ray-konten-m"
+            color="#f97316"
+            spread={[-300, -150, 0, 150, 300]}
+            className="pointer-events-none absolute bottom-0 left-1/2 h-52 w-32 -translate-x-1/2 -rotate-90"
+          />
+        </div>
+
         {/* Step 1 — Hasilkan dulu (Konten.com) — border fades bottom-left */}
         <div className="relative">
-          {/* Orange ambient bloom behind the rays */}
+          {/* Orange ambient bloom behind the rays (desktop) */}
           <span className="pointer-events-none absolute right-full top-1/2 -mr-24 hidden h-64 w-64 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,rgba(249,115,22,0)_70%)] blur-2xl sm:block" />
           {/* Orange rays fanning out to the LEFT (mirrored) from behind the pill */}
           <RayBurst
@@ -167,7 +184,7 @@ export function Ecosystem() {
             className="pointer-events-none absolute right-full top-1/2 -mr-6 hidden h-80 w-32 -translate-y-1/2 -scale-x-100 sm:block lg:w-44"
           />
           <Pill fade="bottom-left">
-            <span className="relative text-lg leading-8 text-white">
+            <span className="relative text-sm leading-8 text-white sm:text-lg">
               HASILKAN DULU
             </span>
             <Image
@@ -175,13 +192,21 @@ export function Ecosystem() {
               alt="Konten.com"
               width={80}
               height={66}
-              className="relative h-11 w-auto"
+              className="relative h-8 w-auto sm:h-11"
             />
           </Pill>
         </div>
 
-        {/* Connector — a thick white bar pinched thin in the middle by two
-            black ellipses (top + bottom). Extends under both pills. */}
+        {/* Mobile-only: vertical white connector between the two pills */}
+        <div aria-hidden className="relative -my-3 h-40 w-4 sm:hidden">
+          <span className="absolute inset-0 bg-white" />
+          <span className="absolute inset-y-0 -left-2/3 w-full rounded-[50%] bg-black" />
+          <span className="absolute inset-y-0 -right-2/3 w-full rounded-[50%] bg-black" />
+          <span className="pointer-events-none absolute -inset-x-0.5 inset-y-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.6)_0%,rgba(255,255,255,1)_50%,rgba(255,255,255,0.6)_100%)] blur-sm" />
+        </div>
+
+        {/* Connector (desktop) — a thick white bar pinched thin in the middle by
+            two black ellipses (top + bottom). Extends under both pills. */}
         <div
           aria-hidden
           className="relative hidden h-6 flex-1 sm:-mx-8 sm:block"
@@ -223,12 +248,23 @@ export function Ecosystem() {
               alt="Trade With Suli"
               width={67}
               height={67}
-              className="relative size-11"
+              className="relative size-8 sm:size-11"
             />
-            <span className="relative text-lg leading-8 text-white">
+            <span className="relative text-sm leading-8 text-white sm:text-lg">
               LALU KEMBANGKAN
             </span>
           </Pill>
+        </div>
+
+        {/* Mobile-only: blue rays pointing DOWN, below pill 2 */}
+        <div className="relative -mt-14 h-28 w-full sm:hidden">
+          <span className="pointer-events-none absolute left-1/2 top-0 size-56 -translate-x-1/2 -translate-y-1/4 rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,rgba(59,130,246,0)_70%)] blur-2xl" />
+          <RayBurst
+            id="ray-tws-m"
+            color="#3b82f6"
+            spread={[-300, -150, 0, 150, 300]}
+            className="pointer-events-none absolute left-1/2 top-0 h-52 w-32 -translate-x-1/2 rotate-90"
+          />
         </div>
       </div>
 

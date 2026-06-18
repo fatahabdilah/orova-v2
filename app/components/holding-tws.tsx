@@ -3,23 +3,32 @@ import { Reveal } from "./motion/reveal";
 
 export function HoldingTws() {
   return (
-    <section className="relative flex w-full items-center justify-start overflow-hidden bg-black px-6 py-20 sm:aspect-1441/875 sm:px-8 sm:py-0 md:pl-20 lg:pl-28 xl:pl-32">
-      {/* Background — laptop sits on the right, left side stays dark */}
+    <section className="relative flex h-screen min-h-screen w-full items-end justify-center overflow-hidden bg-black px-6 pb-12 sm:items-center sm:justify-start sm:px-8 sm:pb-0 md:pl-20 lg:pl-28 xl:pl-32">
+      {/* Background — portrait on mobile (laptop on top), landscape on larger
+          screens (laptop on the right). */}
+      <Image
+        src="/holding-tws-mobile.jpg"
+        alt="Trade With Suli — Edukasi Finansial"
+        fill
+        sizes="100vw"
+        className="object-cover object-top sm:hidden"
+      />
       <Image
         src="/holding-tws.jpg"
         alt="Trade With Suli — Edukasi Finansial"
         fill
         sizes="100vw"
-        className="object-cover object-right"
+        className="hidden object-cover object-right sm:block"
       />
-      {/* Left-side darkening so the copy stays legible */}
+      {/* Darken for legibility — bottom-up on mobile (text sits below), left
+          side on larger screens. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent"
+        className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent sm:bg-linear-to-r sm:from-black sm:via-black/60 sm:to-transparent"
       />
 
-      <Reveal className="relative flex w-full max-w-110.5 flex-col items-start gap-8 sm:gap-10">
-        <div className="flex flex-col items-start gap-5">
+      <Reveal className="relative flex w-full max-w-110.5 flex-col items-center gap-8 text-center sm:items-start sm:gap-10 sm:text-left">
+        <div className="flex flex-col items-center gap-5 sm:items-start">
           <Image
             src="/logos/tws.png"
             alt="Trade With Suli"
@@ -36,7 +45,9 @@ export function HoldingTws() {
           </p>
         </div>
         <a
-          href="#"
+          href="https://tradewithsuli.com/"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full bg-white px-4 py-1 text-lg text-black transition-opacity hover:opacity-80 2xl:text-xl"
         >
           Visit Our Website

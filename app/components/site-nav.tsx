@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function SiteNav() {
@@ -21,14 +20,15 @@ export function SiteNav() {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <Link
+      {/* Plain anchor (not next/link) so clicking does a full page refresh */}
+      <a
         href="/"
         aria-label="Orova Group"
         className="text-base text-white sm:text-xl lg:text-2xl"
       >
         <span className="font-medium">OROVA</span>
         <span className="font-normal"> GROUP</span>
-      </Link>
+      </a>
       <div className="flex items-center gap-6 text-sm font-medium text-white sm:gap-7 lg:text-lg">
         <a href="#about" className="transition-opacity hover:opacity-70">
           About Us
