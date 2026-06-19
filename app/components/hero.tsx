@@ -4,7 +4,7 @@ import { Rise } from "./motion/rise";
 
 export function Hero() {
   return (
-    <section className="relative flex h-svh min-h-svh items-start overflow-hidden bg-neutral-950 px-6 pt-28 sm:items-end sm:pb-20 sm:pt-0 sm:px-8 md:px-12 lg:px-16 lg:pb-24 xl:px-20">
+    <section className="relative flex h-svh min-h-svh items-stretch overflow-hidden bg-neutral-950 px-6 pb-12 pt-28 sm:items-end sm:pb-20 sm:pt-0 sm:px-8 md:px-12 lg:px-16 lg:pb-24 xl:px-20">
       {/* Background video — portrait on mobile, landscape on larger screens.
           Poster stills fall back while each loads. */}
       <HeroVideo className="absolute inset-0 h-full w-full object-cover" />
@@ -16,7 +16,7 @@ export function Hero() {
         className="absolute inset-0 bg-linear-to-b from-black via-black/50 to-transparent sm:bg-linear-to-r sm:from-black sm:via-black/50 sm:to-transparent"
       />
 
-      <div className="relative flex w-full flex-col gap-y-5 lg:flex-row lg:items-end lg:justify-between lg:gap-y-10 lg:gap-x-12">
+      <div className="relative flex w-full flex-col gap-y-5 sm:h-auto lg:flex-row lg:items-end lg:justify-between lg:gap-y-10 lg:gap-x-12">
         {/* Copy */}
         <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:gap-5 sm:text-left">
           <Rise delay={0.15}>
@@ -35,8 +35,8 @@ export function Hero() {
           </Rise>
         </div>
 
-        {/* Holding logos (right, bottom-aligned on desktop) */}
-        <Rise delay={0.5} className="lg:shrink-0">
+        {/* Holding logos — pushed to the bottom on mobile, right on desktop */}
+        <Rise delay={0.5} className="mt-auto sm:mt-0 lg:shrink-0">
           <div className="flex flex-nowrap items-center justify-center gap-x-6 lg:justify-end lg:gap-x-11">
             <Image
               src="/logos/tws-white.png"
