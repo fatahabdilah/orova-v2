@@ -16,7 +16,7 @@ export function Hero() {
         className="absolute inset-0 bg-linear-to-b from-black via-black/50 to-transparent sm:bg-linear-to-r sm:from-black sm:via-black/50 sm:to-transparent"
       />
 
-      <div className="relative flex w-full flex-col gap-y-10 lg:flex-row lg:items-end lg:justify-between lg:gap-x-12">
+      <div className="relative flex w-full flex-col gap-y-5 lg:flex-row lg:items-end lg:justify-between lg:gap-y-10 lg:gap-x-12">
         {/* Copy */}
         <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:gap-5 sm:text-left">
           <Rise delay={0.15}>
